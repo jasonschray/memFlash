@@ -1,0 +1,10 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: .*
+  script: main.app
+
+# Link to mysqldb info for gcloud
+#https://cloud.google.com/appengine/docs/standard/python/cloud-sql/  
