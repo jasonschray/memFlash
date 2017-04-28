@@ -1,0 +1,9 @@
+{% if error %}
+<h1>{{error}}</h1>
+{% else %}
+<h1>Profile: {{username}} </h1>
+    <p> Welcome to MemFlash! </p>
+    <p> Go check out your decks: <a href="/profile/{{username}}/deckbook">Deck Book</a> </p>
+    <a href='/logout'>Logout</a>
+    <a href='/profile'>My profile</a>
+{% endif %}

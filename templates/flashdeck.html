@@ -1,0 +1,15 @@
+<h1> Flashdeck: {{flashdeck.name}} </h1>
+<h2> <a href = "/profile/{{username}}/deckbook">Back To This Users Deckbox</a> </h2>
+<h2> <a href="/profile/{{current_user.username}}">Back To Your Profile</a> </h2>
+
+<ul>
+{% for cube in flashdeck.flashcubes%}
+    <li>
+        <ol>
+            {% for side in cube.getSides() %}
+                <li> {{cube.getSides()[side]['Value']}} </li>
+            {% endfor %}
+        </ol>
+    </li>
+{% endfor %}
+</ul>

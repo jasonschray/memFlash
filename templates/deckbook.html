@@ -1,0 +1,13 @@
+{% if error %}
+<h1>{{error}}</h1>
+{% else %}
+<h1> Deckbook Owner: {{username}} </h1>
+<h2> Decks: </h2>
+<ol>
+{% for item in decks %}
+<li> <a href="/flashdeck_profile/{{item.id}}">{{item.name}}</a> </li>
+{% endfor %}
+</ol>
+<a href="/profile/{{username}}">Back To Profile</a>
+<a href='/profile'>My profile</a>
+{% endif %}
