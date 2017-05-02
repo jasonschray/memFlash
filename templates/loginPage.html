@@ -1,8 +1,10 @@
 <h1>You Need To Log In!</h1>
 {% for message in get_flashed_messages() %}
-<div class=flash>{{ message }}</div> {% endfor %}
+<div class=flash>{{ message }}</div> 
+{% endfor %}
 <form method="POST" action={{ submit_url }}>
     <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
     <div>{{ form.password.label }}: {{ form.password() }}</div>
     <div>{{ form.submit}}</div>
 </form>
+<h2> Don't have an account? <a href='/signup'> Sign Up! </a> </h2>

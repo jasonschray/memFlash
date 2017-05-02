@@ -1,5 +1,13 @@
 <h1> Flashdeck: {{flashdeck.name}} </h1>
+<h2>Users who use this deck</h2>
+<ul>
+{% for current in deckusers %}
+    <li><a href = "/profile/{{current}}"> Profile: {{current}} </a></li>
+{% endfor %}
+</ul>
 <h2> <a href = "/profile/{{username}}/deckbook">Back To This Users Deckbox</a> </h2>
+
+
 <h2> <a href="/profile/{{current_user.username}}">Back To Your Profile</a> </h2>
 
 <ul>

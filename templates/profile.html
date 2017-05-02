@@ -3,6 +3,9 @@
 {% else %}
 <h1>Profile: {{username}} </h1>
     <p> Welcome to MemFlash! </p>
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div> 
+    {% endfor %}
     <p> Go check out your decks: <a href="/profile/{{username}}/deckbook">Deck Book</a> </p>
     <a href='/logout'>Logout</a>
     <a href='/profile'>My profile</a>

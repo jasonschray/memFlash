@@ -1,0 +1,18 @@
+{% if current_user.is_authenticated %}
+<h1> must be logged out to make a new account! </h1>
+<a href='/profile'>Profile</a>
+<a href='/logout'>Log Out</a>
+{% else %}
+<h1> Signup </h1>
+{% for message in get_flashed_messages() %}
+<div class=flash>{{ message }}</div> 
+{% endfor %}
+<p> Fill in the following fields to signup </p>
+<form method="POST" action={{ submit_url }}>
+    <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
+    <div>{{ form.password.label }}: {{ form.password() }}</div>
+    <div>{{ form.passwordRepeat.label }}: {{ form.passwordRepeat() }}</div>
+    <div>{{ form.email.label }}: {{ form.email() }}</div>
+    <div>{{ form.submit}}</div>
+</form>
+{% endif %}
