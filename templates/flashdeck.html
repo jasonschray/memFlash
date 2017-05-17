@@ -5,10 +5,15 @@
     <li><a href = "/profile/{{current}}"> Profile: {{current}} </a></li>
 {% endfor %}
 </ul>
-<h2> <a href = "/profile/{{username}}/deckbook">Back To This Users Deckbox</a> </h2>
 
+<h1> Add A FlashCube </h1>
+<form id="flashCubeForm" method="POST" action='/flashdeck_profile/{{flashdeck.id}}' enctype="multipart/form-data">
+    {% for fieldDict in fields %}
+        <div>{{ fieldDict['sideName'] }}: {{ fieldDict['sideField']() }}</div>
+    {% endfor %}
 
-<h2> <a href="/profile/{{current_user.username}}">Back To Your Profile</a> </h2>
+    <div>{{ form.submit}}</div>
+</form>
 
 <ul>
 {% for cube in flashdeck.flashcubes%}
@@ -21,3 +26,8 @@
     </li>
 {% endfor %}
 </ul>
+
+<h2> <a href = "/profile/{{username}}/deckbook">Back To This Users Deckbox</a> </h2>
+
+
+<h2> <a href="/profile/{{current_user.username}}">Back To Your Profile</a> </h2>

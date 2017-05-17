@@ -2,6 +2,9 @@
 {% for message in get_flashed_messages() %}
 <div class=flash>{{ message }}</div> 
 {% endfor %}
+{% if resend == True %}
+    <a href="/confirm/RESEND"> Click to resend a confirmation email </a>
+{% endif %}
 <form method="POST" action={{ submit_url }}>
     <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
     <div>{{ form.password.label }}: {{ form.password() }}</div>

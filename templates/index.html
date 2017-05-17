@@ -1,4 +1,7 @@
 <h1>This is memFlash!</h1>
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div> 
+    {% endfor %}
     <p> Welcome!</p>
     <a href="profile">Login</a>
 <!-- <p>Link To Decks:<a href="Decks"> Decks Page</a></p> -->

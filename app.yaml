@@ -9,6 +9,8 @@ handlers:
 libraries:
 - name: pycrypto
   version: "2.6.1"
+- name: ssl
+  version: latest
 #- name: mysqldb
 #  version: "1.2.5"
 

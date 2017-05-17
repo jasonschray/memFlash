@@ -1,0 +1,24 @@
+{% if confirmation == "CONFIRMED" %}
+    <h1> Your Account has been verified! </h1>
+        <a href='/login'>Login Here </a>
+{% elif confirmation == "ALREADY_VERIFIED" %}
+    <h1> Your Account has already been verified.</h1>
+    <a href='/profile'> Go To Your Profile </a>
+    <a href='/'> Go To the Welcome Page</a>
+{% elif confirmation == "TIMEOUT" %}
+    <h1> Your Account verification link has expired! </h1>
+    <p> To verify your account, you must have memFlash send a new confirmation email. Then click that link in your email within 24 hours. To have memFlash send a new confirmation email, click below:</p>
+    <a href='/'>Resend Verification Email </a>
+{% elif confirmation == "RESEND" %}
+<h1> Please input your user data to resend an confirmation email </h1>
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div> 
+    {% endfor %}
+    <form method="POST" action='/confirm/RESEND'>
+        <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
+        <div>{{ form.email.label }}: {{ form.email() }}</div>
+        <div>{{ form.submit}}</div>
+    </form>
+{% else %}
+    <h1> Invalid Confirmation Email Link </h1>
+{% endif %}

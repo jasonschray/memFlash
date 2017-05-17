@@ -1,3 +1,6 @@
+<head>
+</head>
+<body>
 {% if error %}
 <h1>{{error}}</h1>
 {% else %}
@@ -10,4 +13,23 @@
 </ol>
 <a href="/profile/{{username}}">Back To Profile</a>
 <a href='/profile'>My profile</a>
+<h2> Build A Deck </h2>
+<form id="flashdeckForm" method="POST" action='/profile/{{username}}/deckbook'>
+    <div>{{ form.deckName.label }}: {{ form.deckName(class="css_class") }}</div>
+    <div>{{ form.sideCount.label }}: {{ form.sideCount() }}</div>
+    <div>{{ form.side1Type.label }}: {{ form.side1Type() }}</div>
+    <div>{{ form.side1Name.label }}: {{ form.side1Name() }}</div>
+    <div>{{ form.side2Type.label }}: {{ form.side2Type() }}</div>
+    <div>{{ form.side2Name.label }}: {{ form.side2Name() }}</div>
+    <div>{{ form.side3Type.label }}: {{ form.side3Type() }}</div>
+    <div>{{ form.side3Name.label }}: {{ form.side3Name() }}</div>    
+    <div>{{ form.side4Type.label }}: {{ form.side4Type() }}</div>
+    <div>{{ form.side4Name.label }}: {{ form.side4Name() }}</div>
+
+    <div>{{ form.submit}}</div>
+</form>
 {% endif %}
+
+<script src="{{url_for('static', filename='flashdeck.js')}}"></script>
+
+</body>
