@@ -1,35 +1,93 @@
-<head>
-</head>
-<body>
-{% if error %}
-<h1>{{error}}</h1>
-{% else %}
-<h1> Deckbook Owner: {{username}} </h1>
-<h2> Decks: </h2>
-<ol>
-{% for item in decks %}
-<li> <a href="/flashdeck_profile/{{item.id}}">{{item.name}}</a> </li>
-{% endfor %}
-</ol>
-<a href="/profile/{{username}}">Back To Profile</a>
-<a href='/profile'>My profile</a>
-<h2> Build A Deck </h2>
-<form id="flashdeckForm" method="POST" action='/profile/{{username}}/deckbook'>
-    <div>{{ form.deckName.label }}: {{ form.deckName(class="css_class") }}</div>
-    <div>{{ form.sideCount.label }}: {{ form.sideCount() }}</div>
-    <div>{{ form.side1Type.label }}: {{ form.side1Type() }}</div>
-    <div>{{ form.side1Name.label }}: {{ form.side1Name() }}</div>
-    <div>{{ form.side2Type.label }}: {{ form.side2Type() }}</div>
-    <div>{{ form.side2Name.label }}: {{ form.side2Name() }}</div>
-    <div>{{ form.side3Type.label }}: {{ form.side3Type() }}</div>
-    <div>{{ form.side3Name.label }}: {{ form.side3Name() }}</div>    
-    <div>{{ form.side4Type.label }}: {{ form.side4Type() }}</div>
-    <div>{{ form.side4Name.label }}: {{ form.side4Name() }}</div>
+{% extends "base.html" %}
+{% block title %}Deckbook - {{user.username}}{% endblock %} 
 
-    <div>{{ form.submit}}</div>
-</form>
-{% endif %}
+{% block head %}
+{{ super() }}
+<!--    <style type="text/css">
+    .card{
+        min-width: 200px;
+    }
+    </style>-->
+{% endblock %}
+{% block content %}
 
-<script src="{{url_for('static', filename='flashdeck.js')}}"></script>
 
-</body>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+      <li class="breadcrumb-item active">Deckbook</li>
+    </ol>
+
+
+
+<div class="row">
+
+    <div class="class=col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {% if current_user.username == user.username %}
+        <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#deckFormModal">
+          Make New Deck
+        </button>
+        {% endif %}
+    </div>
+
+</div>
+<div class="spacer"></div>
+<div class="card-deck">
+  {% for deck in decks %}
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+        <a href="/flashdeck_profile/{{deck.id}}" style='text-decoration:none'>
+        <div class="card btn-secondary m-3" type="button">
+        
+        <!-- <img class="card-img-top" src="{{deck.profile_photo}}" alt="Card image cap"> -->
+        <div class="card-block ">
+          <h4 class="card-title">{{deck.name}}</h4>
+          <p class="card-text">{{deck.self_description}}</p>
+<!--           <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+ -->          
+        </div>
+
+      </div>
+      </a>
+  </div>
+    {% endfor %}
+  
+</div>    
+
+        
+    
+    {% if current_user.username == user.username %}
+
+    <!-- Modal -->
+        <div class="modal fade" id="deckFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Build A Deck</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                <form id="flashdeckForm" style="display:none" method="POST" action='/profile/{{user.username}}/deckbook'>
+                    {{form}}
+                </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+ 
+
+        <script src="{{url_for('static', filename='flashdeck.js')}}"></script>
+    {% endif %}
+
+
+{% endblock %}

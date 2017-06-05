@@ -6,8 +6,6 @@
     <a href="/confirm/RESEND"> Click to resend a confirmation email </a>
 {% endif %}
 <form method="POST" action={{ submit_url }}>
-    <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
-    <div>{{ form.password.label }}: {{ form.password() }}</div>
-    <div>{{ form.submit}}</div>
+   {{form}}
 </form>
 <h2> Don't have an account? <a href='/signup'> Sign Up! </a> </h2>

@@ -1,33 +1,162 @@
-<h1> Flashdeck: {{flashdeck.name}} </h1>
-<h2>Users who use this deck</h2>
-<ul>
-{% for current in deckusers %}
-    <li><a href = "/profile/{{current}}"> Profile: {{current}} </a></li>
-{% endfor %}
-</ul>
+{% extends "base.html" %}
+{% block title %}Mem Flash - Flashdeck - {{flashdeck.name}}{% endblock %} 
 
-<h1> Add A FlashCube </h1>
-<form id="flashCubeForm" method="POST" action='/flashdeck_profile/{{flashdeck.id}}' enctype="multipart/form-data">
-    {% for fieldDict in fields %}
-        <div>{{ fieldDict['sideName'] }}: {{ fieldDict['sideField']() }}</div>
-    {% endfor %}
+{% block head %}
+{{ super() }}
+ <style type='text/css'>   
+    audio {
+        width:100%;
+        height: auto;
+    }
+    .between {
+    border: 1px solid rgba(0,0,0,.125);
+    margin-left:0px;
+    margin-right:0px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
 
-    <div>{{ form.submit}}</div>
-</form>
+      <li class="breadcrumb-item "><a href="/profile/{{user.username}}/deckbook"> Deckbook </a></li>
+      <li class="breadcrumb-item active">{{flashdeck.name}}</li>
 
-<ul>
-{% for cube in flashdeck.flashcubes%}
-    <li>
-        <ol>
-            {% for side in cube.getSides() %}
-                <li> {{cube.getSides()[side]['Value']}} </li>
+    </ol>
+
+
+
+
+
+
+
+  <div class="card m-3" >
+      <div class="card-block ">
+                  <h4 class="card-title">{{flashdeck.name}}</h4>
+                  <p class="card-text">{{flashdeck.self_description}}</p>
+      </div>
+             
+
+
+  <div class="card-block ">
+    <div class="row">
+
+    {% if flashcube_count > 0 %}
+        <div class="class=col-xs-12 col-sm-12 col-md-12  col-lg-3">
+            <a class="btn btn-primary btn-lg btn-block" href="{{random_test_url}}">Random Card Test</a> 
+        </div>
+    {% endif %}
+    {% if current_user.username == user.username %}
+        <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block " data-toggle="modal" data-target="#updateFormModal">
+              Update Deck Info
+            </button>
+        </div>
+        <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#cardFormModal">
+              Add A New Card
+            </button>
+        </div>
+        <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
+            <a class="btn btn-primary btn-lg btn-block" href="/delete_flashdeck/{{flashdeck.id}}">Delete This Deck</a> 
+        </div>
+    {% endif %}
+    
+    </div>
+    <hr class="between"/>
+  </div>
+
+    <div class="card-block ">   
+    <div class="spacer"></div>
+    <div class="card-deck">
+      {% for card in flashdeck.flashcubes %}
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+            <a href="/flashcube_profile/{{card.id}}" style='text-decoration:none'>
+            <div class="card btn-secondary m-3" type="button">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            {% for side in card.sides %}
+                <div class="card-block ">
+                  <h4 class="card-title">{{side}}</h4>
+                  {% if card.sides[side]['side_type'] == 'TEXT'%}
+                  <p class="card-text">{{card.sides[side]['side_value']}}</p>
+<!--                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+ -->              {% elif card.sides[side]['side_type'] =='AUDIO'%}   
+                    <audio controls>
+                    <source src="{{card.sides[side]['side_value']}}">
+                    'Your browser does not support the audio tag.'
+                    </audio>
+                  {% elif card.sides[side]['side_type'] =='IMAGE'%}   
+                    <img src="{{card.sides[side]['side_value']}}" class="img-responsive rounded mx-auto d-block" alt="Responsive image">
+                  {% endif %}
+                </div>
+                {% if loop.index !=  card.sides.__len__() %}
+                <hr class="between"/>
+                {% endif %}
             {% endfor %}
-        </ol>
-    </li>
-{% endfor %}
-</ul>
+          </div>
+          </a>
+        </div>
+    {% endfor %}
+    </div> 
+  </div>
+  </div>
 
-<h2> <a href = "/profile/{{username}}/deckbook">Back To This Users Deckbox</a> </h2>
+    
+ {% if current_user.username == user.username %}
+    <!-- Modal -->
+        <div class="modal fade" id="updateFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Update Deck Information</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                    <form id="updateDeckForm" method="POST" action='/flashdeck_update/{{flashdeck.id}}' enctype="multipart/form-data">
+                        {{deckUpdateForm}}
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Modal -->
+        <div class="modal fade" id="cardFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add A Card</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                    <form id="flashCubeForm" method="POST" action='/flashdeck_profile/{{flashdeck.id}}' enctype="multipart/form-data">
+                        {{flashCubeForm}}
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
 
 
-<h2> <a href="/profile/{{current_user.username}}">Back To Your Profile</a> </h2>
+    
+{% endblock %}
+

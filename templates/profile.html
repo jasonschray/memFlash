@@ -1,12 +1,116 @@
-{% if error %}
-<h1>{{error}}</h1>
-{% else %}
-<h1>Profile: {{username}} </h1>
-    <p> Welcome to MemFlash! </p>
+{% extends "base.html" %}
+{% block title %}Mem Flash - {{user.username}}{% endblock %} 
+
+{% block head %}
+{{ super() }}
+    <style type="text/css">
+        
+        .circle-avatar{
+        /* make it responsive */
+          
+          height: 100%;
+          width: 100%;
+
+        
+        
+        display:block;
+     
+        /* div height to be the same as width*/
+        
+
+        /* make it a circle */
+        border-radius:50%;
+
+        /* Centering on image`s center*/
+        background-position-y: center;
+        background-position-x: center;
+        background-repeat: no-repeat;
+
+        /* it makes the clue thing, takes smaller dimension to fill div */
+        background-size: cover;
+
+        border: 5px solid #cfd8dc;
+
+
+        }
+        .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+        }
+        .avatar-row{
+            height: 10px;
+
+        }
+
+
+        .bottom-align {
+            position: absolute;
+            bottom: 0;
+
+            left: 0;
+        }
+         // in case your dealing with a block element apply this to the element itself 
+        .center-block {
+           margin-left:auto;
+           margin-right:auto;
+           display:block;
+        }
+        // in case your dealing with a inline element apply this to the parent 
+        .text-center {
+           text-align:center
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+
+<div class="card card-inverse" style="background-color: #333; border-color: #333;">
+  
+  <div class="card-block">
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 ">
+            <div class="avatar-profile">
+                <div class="circle-avatar" style="background-image:url({{user.profile_photo}})">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 col-md-1 text-center align-bottom">          
+            <h1  >{{user.username}} </h1>
+        </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="spacer"></div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+        <a href="/profile/{{user.username}}/deckbook" class="btn btn-primary btn-lg btn-block active" role="button" aria-pressed="true">My Deck Book</a>     
+    </div>
+</div>
+<div class="spacer"></div>
+<div class="row">
+    <div class="col-xs-12 col-sm-5 col-md-3 text-center">
+        <h2> A Little About Me </h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+       <p> {{user.self_description}}</p>
+    </div>
+</div>
+
+
+
+
     {% for message in get_flashed_messages() %}
         <div class=flash>{{ message }}</div> 
     {% endfor %}
-    <p> Go check out your decks: <a href="/profile/{{username}}/deckbook">Deck Book</a> </p>
-    <a href='/logout'>Logout</a>
-    <a href='/profile'>My profile</a>
-{% endif %}
+
+
+{% endblock %}
+

@@ -1,50 +1,37 @@
-var scriptvar = document.createElement('script');
-scriptvar.src = 'https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js';
-//script.type = 'text/javascript';
- 
-// document.head.appendChild(s); 
+// var scriptvar = document.createElement('script');
+// scriptvar.src = 'https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js';
 
 function updateDeckForm(){
-    // console.log('undating deck form')
     for (var i = 3; i <= 4; i++) {
-                selectContainString = 'label:contains("Side '+i+' Type")'
-                nameContainString   = 'label:contains("Side '+i+' Name")'
-                // console.log(containString)
 
-                curtypediv = $(selectContainString).parent()
-                curnamediv = $(nameContainString).parent()
-                // console.log(curdiv)
-                if (i <= $('select#sideCount').val())
+
+                selectContainString = 'input[name="side_'+i+'_name"]'
+                curSelectdiv = $(selectContainString).parent()
+                labelContainString = 'select[name="side_'+i+'_type"]'
+                curLabeldiv = $(labelContainString).parent()
+
+                if (i <= parseInt($('select[name="side_count"]').val()))
                 {
-                    curtypediv.show()
-                    curnamediv.show()
+                    curSelectdiv.show()
+                    curLabeldiv.show()
                 }
                 else
                 {
-                    curtypediv.hide()
-                    curnamediv.hide()
+                    curSelectdiv.hide()
+                    curLabeldiv.hide()
                 }
+               
             };
 }
-document.getElementsByTagName('head')[0].appendChild(scriptvar);
 
-scriptvar.onload = function(e){ 
+// document.getElementsByTagName('head')[0].appendChild(scriptvar);
+// scriptvar.onload = function(e){ 
     $( document ).ready(function() {
-        // console.log( "ready!" );
-
         if(typeof $ !== 'undefined'){
-            // console.log($('#flashdeckForm'))
-            // console.log(($('#flashdeckForm').children("div:contains('Number of Sides')").first()))
-            // console.log($('select#sideCount').val())
-           updateDeckForm();
-           // console.log($('select#sideCount'))
-           $('select#sideCount').change(updateDeckForm);
-            // curdiv = $("label:contains('Side 4 Type')").parent()
-            // console.log($("label:contains('Side 4 Type')").parent())
+            updateDeckForm();
+            $('select[name="side_count"]').change(updateDeckForm);
+            document.getElementById("flashdeckForm").style.display="block";
         }
-
         $()
     });
-};
-
-
+// };
