@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - Flashdeck - {{flashdeck.name}}{% endblock %} 
+
+{% block head %}
+{{ super() }}
+ <style type='text/css'>   
+    audio {
+        width:100%;
+        height: auto;
+    }
+    .between {
+    border: 1px solid rgba(0,0,0,.125);
+    margin-left:0px;
+    margin-right:0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+
+      <li class="breadcrumb-item "><a href="/profile/{{user.username}}/deckbook"> Deckbook </a></li>
+      <li class="breadcrumb-item "><a href="/flashdeck_profile/{{flashdeck.id}}"> {{flashdeck.name}} </a></li>
+      <li class="breadcrumb-item active">Current Flashcube</li>
+
+    </ol>
+
+    <div class="row">
+   {% if current_user.username == user.username %}
+        <div class="class=col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
+        <div class="class=col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <a class="btn btn-primary btn-lg btn-block" href="/delete_flashcube/{{flashcube.id}}">Delete This Cube</a> 
+        </div>
+        <div class="class=col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
+    {% endif %}
+   </div>
+    <div class="spacer"></div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4 "></div>
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-4 ">
+            <div class="card text-center">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            {% for side in flashcube.sides %}
+                <div class="card-block ">
+                  <h4 class="card-title">{{side}}</h4>
+                  {% if flashcube.sides[side]['side_type'] == 'TEXT'%}
+                  <p class="card-text">{{flashcube.sides[side]['side_value']}}</p>
+<!--                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+ -->              {% elif flashcube.sides[side]['side_type'] =='AUDIO'%}   
+                    <audio controls>
+                    <source src="{{flashcube.sides[side]['side_value']}}">
+                    'Your browser does not support the audio tag.'
+                    </audio>
+                  {% elif flashcube.sides[side]['side_type'] =='IMAGE'%}   
+                    <img src="{{flashcube.sides[side]['side_value']}}" class="img-responsive rounded mx-auto d-block" alt="Responsive image">
+                  {% endif %}
+                </div>
+                {% if loop.index !=  flashcube.sides.__len__() %}
+                <hr class="between"/>
+                {% endif %}
+            {% endfor %}
+          </div>
+          </a>
+        </div>
+        <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4 "></div>
+      </div>
+
+    
+
+
+
+    
+{% endblock %}
+

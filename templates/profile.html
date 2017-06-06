@@ -5,34 +5,7 @@
 {{ super() }}
     <style type="text/css">
         
-        .circle-avatar{
-        /* make it responsive */
-          
-          height: 100%;
-          width: 100%;
-
-        
-        
-        display:block;
-     
-        /* div height to be the same as width*/
-        
-
-        /* make it a circle */
-        border-radius:50%;
-
-        /* Centering on image`s center*/
-        background-position-y: center;
-        background-position-x: center;
-        background-repeat: no-repeat;
-
-        /* it makes the clue thing, takes smaller dimension to fill div */
-        background-size: cover;
-
-        border: 5px solid #cfd8dc;
-
-
-        }
+    
         .avatar-profile{
             height: 100px;
             width: 100px;
@@ -72,7 +45,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-1 ">
             <div class="avatar-profile">
-                <div class="circle-avatar" style="background-image:url({{user.profile_photo}})">
+                <div class="circle-avatar">
                 </div>
             </div>
         </div>
@@ -88,9 +61,20 @@
 
 <div class="spacer"></div>
 <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-4">
-        <a href="/profile/{{user.username}}/deckbook" class="btn btn-primary btn-lg btn-block active" role="button" aria-pressed="true">My Deck Book</a>     
+    <div class="col-xs-12 col-sm-6 col-md-3">
+        <a href="/profile/{{user.username}}/deckbook" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">My Deck Book</a>     
     </div>
+    {% if current_user.username == user.username %}
+     <div class="col-xs-12 col-sm-6 col-md-3">
+        <a href="/profile/{{current_user.username}}/favorite_decks" class="btn btn-primary btn-lg btn-block" role="button" aria-pressed="true">Favorite Decks</a>     
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#updateProfileFormModal">
+              Update Profile Info
+            </button>
+    </div>
+   
+    {% endif %}
 </div>
 <div class="spacer"></div>
 <div class="row">
@@ -104,6 +88,11 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+       <p> Registerd on: {{user.registered_on}}</p>
+    </div>
+</div>
 
 
 

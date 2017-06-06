@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - Error{% endblock %} 
+
+{% block head %}
+{{ super() }}
+    <style type="text/css">
+        
+        .circle-avatar{
+        /* make it responsive */
+          
+          height: 100%;
+          width: 100%;
+
+        
+        
+        display:block;
+     
+        /* div height to be the same as width*/
+        
+
+        /* make it a circle */
+        border-radius:50%;
+
+        /* Centering on image`s center*/
+        background-position-y: center;
+        background-position-x: center;
+        background-repeat: no-repeat;
+
+        /* it makes the clue thing, takes smaller dimension to fill div */
+        background-size: cover;
+
+
+        }
+        .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+        }
+        .bottom_align {
+            position: absolute;
+            bottom: 0;
+            /*left: 0;*/
+  }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+{% endblock %}
+

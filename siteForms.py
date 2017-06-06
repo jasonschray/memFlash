@@ -202,6 +202,8 @@ class uploadField ( abstractField ):
         if request is not None and request.method == 'POST':
             if self.name in request.files:
                 self.value = request.files[self.name]
+                if self.value.filename == '':
+                    self.value = None
                 # if request.
 
 
@@ -399,6 +401,26 @@ class deckUpdateForm ( abstractForm ):
             for field_dict in self.fields:
                 if field_dict['Field'].name in request.form:
                     field_dict['Field'].value = request.form[field_dict['Field'].name]
+
+class profileUpdateForm ( abstractForm ):
+
+
+    fields = [{'Name':'Profile Photo','Field':imageField(name = 'profile_photo')},
+              {'Name':'About Me','Field':textArea(name = 'self_description')},
+              {'Name': None,'Field':submitField()}]
+
+    def __init__(self,request=None, user = None):
+        if user is not None:
+            self.fields[1]['Field'].value = user.self_description
+
+        
+        if request is not None and request.method == 'POST':
+            self.is_post = True
+        if self.is_post :
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                if field_dict['Field'].name in request.form or field_dict['Field'].name in request.files:
+                    field_dict['Field'].update_value(request=request)
 
 
 

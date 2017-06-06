@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - {% endblock %} 
+
+{% block head %}
+{{ super() }}
+
+<style type="text/css">
+/*    .show-sides {
+      display: none;
+    }
+    .test-cards {
+      display: none;
+    }*/
+
+    .de-activate {
+      display: none;
+    }
+    .between {
+    /*  border: 1px solid rgba(0,0,0,.125);*/
+    margin-left:0px;
+    margin-right:0px;
+}
+    
+    
+    </style>
+    
+{% endblock %}
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+
+      <li class="breadcrumb-item "><a href="/profile/{{user.username}}/deckbook"> Deckbook </a></li>
+      <li class="breadcrumb-item "><a href="/flashdeck_profile/{{flashdeck.id}}"> {{flashdeck.name}} </a></li>
+      <li class="breadcrumb-item active">Random Card Tester</li>
+
+    </ol>
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 "></div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 ">
+        <a href="/random_card_tester?flashdeck_id={{flashdeck.id}}&flashcube_id={{flashcube.id}}&selected_side={{selected_side}}" class="btn btn-primary  btn-block" id="nextCardButton">Next Card</a>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 ">
+
+        <select class="custom-select btn-block" id='test_name' name="test_name">
+            {% for side in flashcube.sides%}
+                {% if side == selected_side %}
+                    <option selected value="{{side}}">{{side}}</option>
+                {% else %}
+                    <option value="{{side}}">{{side}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 ">
+        <button type="button" id="show-sides" class="btn btn-primary  btn-block">
+          <div class="show-sides ">Show Sides</div>
+          <div class="show-sides de-activate">Hide Sides</div>
+        </button>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 "></div>
+
+</div>
+<div class="spacer"></div>
+<div class="spacer"></div>
+
+{% for top_side in flashcube.sides%}
+    <div class="row test-cards de-activate" id="{{top_side}}" >
+      <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4 "></div>
+
+      <div class="col-xs-12 col-sm-8 col-md-4 col-lg-4 ">
+        <a href="/random_card_tester?flashdeck_id={{flashdeck.id}}&flashcube_id={{flashcube.id}}&selected_side={{top_side}}" style='text-decoration:none'>
+            <div class="card text-center btn-secondary" >
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <div class="card-block ">
+                  <h4 class="card-title">{{top_side}}</h4>
+                  {% if flashcube.sides[top_side]['side_type'] == 'TEXT'%}
+                  <p class="card-text">{{flashcube.sides[top_side]['side_value']}}</p>
+              {% elif flashcube.sides[top_side]['side_type'] =='AUDIO'%}   
+                    <audio controls>
+                    <source src="{{flashcube.sides[top_side]['side_value']}}">
+                    'Your browser does not support the audio tag.'
+                    </audio>
+                {% elif flashcube.sides[top_side]['side_type'] =='IMAGE'%}   
+                    <img src="{{flashcube.sides[top_side]['side_value']}}" class="img-responsive rounded mx-auto d-block" alt="Responsive image">
+                  {% endif %}
+                </div>
+                <hr class="between show-sides de-activate"/>
+
+            {% for side in flashcube.sides %}
+            {% if side != top_side %}
+                <div class="card-block show-sides de-activate">
+                  <h4 class="card-title">{{side}}</h4>
+                  {% if flashcube.sides[side]['side_type'] == 'TEXT'%}
+                  <p class="card-text">{{flashcube.sides[side]['side_value']}}</p>
+<!--                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+ -->              {% elif flashcube.sides[side]['side_type'] =='AUDIO'%}   
+                    <audio controls>
+                    <source src="{{flashcube.sides[side]['side_value']}}">
+                    'Your browser does not support the audio tag.'
+                    </audio>
+                  {% elif flashcube.sides[side]['side_type'] =='IMAGE'%}   
+                    <img src="{{flashcube.sides[side]['side_value']}}" class="img-responsive rounded mx-auto d-block" alt="Responsive image">
+                  {% endif %}
+                </div>
+                {% if loop.index <  flashcube.sides.__len__()-1 %}
+                <hr class="between show-sides de-activate"/>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+          </div>
+          </a>
+        </div>
+        <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4 "></div>
+      </div>
+{%endfor%}
+
+
+
+
+
+
+<script src="{{url_for('static', filename='random_card_tester.js')}}"></script>
+
+{% endblock %}

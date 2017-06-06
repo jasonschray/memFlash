@@ -8,11 +8,7 @@
         width:100%;
         height: auto;
     }
-    .between {
-    border: 1px solid rgba(0,0,0,.125);
-    margin-left:0px;
-    margin-right:0px;
-    }
+
 </style>
 {% endblock %}
 {% block content %}
@@ -60,6 +56,16 @@
         <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
             <a class="btn btn-primary btn-lg btn-block" href="/delete_flashdeck/{{flashdeck.id}}">Delete This Deck</a> 
         </div>
+    {% else %}
+    <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      {% if flashdeck not in current_user.favorite_decks %}
+      
+            <a class="btn btn-primary btn-lg btn-block" href="/add_deck_to_favorites/{{flashdeck.id}}">Add To Favorites</a> 
+        
+      {% else %}
+            <a class="btn btn-primary btn-lg btn-block" href="/remove_deck_from_favorites/{{flashdeck.id}}">Remove From Favorites</a> 
+      {% endif %}
+      </div>
     {% endif %}
     
     </div>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Deckbook - {{user.username}}{% endblock %} 
+
+{% block head %}
+{{ super() }}
+<!--    <style type="text/css">
+    .card{
+        min-width: 200px;
+    }
+    </style>-->
+{% endblock %}
+{% block content %}
+
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+      <li class="breadcrumb-item active">Favorited Decks</li>
+    </ol>
+
+
+
+<div class="row">
+
+    <div class="class=col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {% if current_user.username == user.username %}
+<!--         <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#deckFormModal">
+          Make New Deck
+        </button> -->
+        {% endif %}
+    </div>
+
+</div>
+<div class="spacer"></div>
+<div class="card m-3" >
+      <div class="card-block ">
+                  <h4 class="card-title">Favorited Decks</h4>
+                  
+      </div>
+             
+
+<hr class="between"/>
+  <div class="card-block ">
+<div class="card-deck">
+  {% for deck in decks %}
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+        <a href="/flashdeck_profile/{{deck.id}}" style='text-decoration:none'>
+        <div class="card btn-secondary m-3" type="button" >
+        
+        <!-- <img class="card-img-top" src="{{deck.profile_photo}}" alt="Card image cap"> -->
+        <div class="card-block ">
+          <h4 class="card-title">{{deck.name}}</h4>
+          
+          <p class="card-text">{{deck.self_description}}</p>
+<!--           <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+ -->          
+        </div>
+        <div class="card-block ">
+          
+          
+          
+          <p class="card-text"><small class="text-muted">Deck Owner: {{deck.user[0].username}}</small></p>
+
+        </div>
+
+      </div>
+      </a>
+  </div>
+    {% endfor %}
+  
+</div>    
+</div>
+</div>
+        
+    
+   
+
+
+{% endblock %}

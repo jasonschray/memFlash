@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Deckbook - {{user.username}}{% endblock %} 
+
+{% block head %}
+{{ super() }}
+<!--    <style type="text/css">
+    .card{
+        min-width: 200px;
+    }
+    </style>-->
+{% endblock %}
+{% block content %}
+
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+      <li class="breadcrumb-item active">Activity Log</li>
+    </ol>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+{% if end_page > 1 %}
+
+    {% if page == 1 %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Previous</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="/profile/{{user.username}}/activity_log/{{page-1}}">Previous</a></li>
+    <li class="page-item "><a class="page-link" href="/profile/{{user.username}}/activity_log/{{page-1}}">{{page-1}}</a></li>
+    {% endif %}
+
+    <li class="page-item active"><a class="page-link" href="#">{{page}}</a></li>
+    {% if page == end_page %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Next</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="/profile/{{user.username}}/activity_log/{{page+1}}">{{page+1}}</a></li>
+    <li class="page-item "><a class="page-link" href="/profile/{{user.username}}/activity_log/{{page+1}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+      <!-- <th>#</th> -->
+      <th>Date</th>
+      <th>Event</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+    <tr>
+      <!-- <td>{{loop.index}}</td> -->
+      <td>{{event.time}}</td>
+      <td>{{ event.event_text|safe }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+        
+    
+   
+
+
+{% endblock %}
