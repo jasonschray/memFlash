@@ -18,3 +18,5 @@ Blue Aqua/ Light/Grey selection:
     3d8788
 
 navbar resizing: https://codepen.io/bootstrapped/pen/KwYGwq
+
+ sudo /usr/local/mysql/support-files/mysql.server start

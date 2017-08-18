@@ -1,8 +1,108 @@
-<h1>This is memFlash!</h1>
+
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    
+
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+   <!-- <script src="/static/jquery-1.11.1.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css"> -->
+
+    <title>Mem Flash</title> 
+    <style type="text/css">
+    
+    </style>
+
+</head> 
+<body>
+
+    <div id="header">
+
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+         
+            <ul class="navbar-nav mr-auto">
+               
+                
+            </ul>
+            <ul class="navbar-nav ">
+                
+                
+               
+                
+                 <li class="nav-item">
+                    <a class="nav-link" href="login">Login</a>
+<!--                     <a class="nav-link" href="/forums">Forums</a>
+ -->                 </li>
+                 <li class="nav-item">
+                    <a class="nav-link"href='/signup'> Sign Up </a> 
+                    <!-- <a class="nav-link" href="/profile/{{current_user.username}}/deckbook">Deck Book</a> -->
+                </li>
+            </ul>
+        </div>
+        </nav>
+
+ 
+    </div>
+    <div class="spacer"></div>
+    <div id="content" class="container-fluid">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-info" role="alert">
+      <strong>Heads up!</strong> {{ message }}
+    </div>
+    {% endfor %}
+    <div style="margin:50px" class="text-center">
+        <span>
+         <img alt="Brand" src="/static/favicon-Blue-Grey.png" class="img-responsive" />
+         <h1> Mem Flash</h1>
+     </span>
+        </div>
     {% for message in get_flashed_messages() %}
         <div class=flash>{{ message }}</div> 
     {% endfor %}
-    <p> Welcome!</p>
-    <a href="login">Login</a>
-<!-- <p>Link To Decks:<a href="Decks"> Decks Page</a></p> -->
-<h2> Let the fun begin </h2>
+    
+        
+         <div class="row text-center">
+        <div class="col-lg-4">
+          <img class="rounded-circle" src="/static/team-motivation-teamwork-together-53958.jpeg" alt="Generic placeholder image" width="140" height="140">
+          <h2>Social</h2>
+          <p>We consider learning to be a social activity. That is why our users can create descriptive profiles with custom profile images and interact with other users in a forum setting. In the future we plan to implement friends lists and peer-to-peer messages.</p>
+          <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="rounded-circle" src="/static/pexels-photo-239898.jpeg" alt="Generic placeholder image" width="140" height="140">
+          <h2>Flashcards</h2>
+          <p>Our smart flashcards are built to allow our users to learn many different kinds of relationships. Our cards support images, audio files, and multiple writing systems (including Chinese, Japanese, and Mathematical Symbols).</p>
+          <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="rounded-circle" src="/static/pexels-photo-261909.jpeg" alt="Generic placeholder image" width="140" height="140">
+          <h2>Self-Testing</h2>
+          <p>The core philosophy of our site is that people should use this app to teach themselves. We want our users to use our systems for self betterment. As a result, there is no way for users to administer testing. Our tests track users proficiency in a given flashcard and adjust how testing is done to reduce time-to-memorize.</p>
+          <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
+
+    </div> 
+    <footer class="footer">
+      <div class="container-fluid">
+        <p class="text-muted">&copy; Copyright 2017 by MemFlash. </p>
+      </div>
+
+    
+
+   
+    </footer>
+
+    
+
+</body>
+</html>

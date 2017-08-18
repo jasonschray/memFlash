@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - FAQ{% endblock %} 
+
+{% block head %}
+{{ super() }}
+    <style type="text/css">
+        
+    
+        .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+        }
+        .avatar-row{
+            height: 10px;
+
+        }
+
+
+        .bottom-align {
+            position: absolute;
+            bottom: 0;
+
+            left: 0;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+ <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+      <li class="breadcrumb-item active">FAQ</li>
+    </ol>
+
+
+<div class="row">
+  <div class="col-sm-3">
+    <h2>Contents</h2><br>
+    <h5>User Profiles</h5>
+    <ul>
+      <li><a href="#profile_info">Profile Info</a></li>
+    </ul>
+    <h5>Flashdecks</h5>
+    <ul>
+      <li><a href="#deck_book">Deck Book</a></li>
+      <li><a href="#making_a_deck">Making A Deck</a></li>
+      <li><a href="#deleting_a_deck">Deleting A Deck</a></li>
+      <li><a href="#testing">Testing</a></li>
+    </ul>
+    <h5>Flashcubes</h5>
+    <ul>
+      <li><a href="#flashcube_capabilities">Flashcube Capabilities</a></li>
+      <li><a href="#making_a_flashcube">Making A Flashcube</a></li>
+    </ul>
+    <h5>Forums</h5>
+    <ul>
+      <li><a href="#creating_a_forum">Creating A Forum</a></li>
+      <li><a href="#posting_on_a_forum">Posting On A Forum</a></li>
+    </ul>
+    <h5>Search</h5>
+    <ul>
+      <li><a href="#search_options">Search Options</a></li>
+    </ul>
+    <h5>Other</h5>
+    <ul>
+      <li><a href="#post_custom_questions">Post Custom Questions</a></li>
+    </ul>
+  </div>
+  <div class="col-sm-7">
+    <h1>User Profiles</h1>
+    <p>User profiles are the root of this site. From this page all other parts of the site are accessible.</p>
+    <h5 id="profile_info">Profile Info</h5>
+    <p>Profiles contain a profile photo, a description of the user, and then the date when the account was created. The profile photo and user profile description is editable through a button on the profile page. Please keep the description modest as it is publicly available to any user on the site. From this page, one can access their deckbook and favorited decks as well as update their profile.</p>
+
+    <h1>Flashdecks</h1>
+    <p>Flashdecks contain all flashcards in this site. To test yourself, you must use flashdecks.</p>
+    <h5 id="deck_book">Deck Book</h5>
+    <p>A user's deck book is where all of their flashdecks are contained. Here a user can view their decks. A user can view other users deckbooks and see their decks as well. This book is publicly available. Here a user can also create a new deck.</p>
+    <h5 id="making_a_deck">Making A Deck</h5>
+    <p>When a user decides to make a new flashdeck the user must first define the type of cards that will be contained within that deck. When a user clicks on the "Make New Deck" button, a pop-up window comes up. The first piece of data required is the name of the deck to be made. All cards in a deck must have the same number of sides, side types, and side names so the user must decide how many sides those cards will have along with their side names and data types.</p>
+    <h5 id="deleting_a_deck">Deleting A Deck</h5>
+    <p>Be careful about deleting a deck because it is final once done.</p>
+    <h5 id="testing">Testing</h5>
+    <p>There are two ways to use this site to learn things through self testing. Self testing is done either by shuffling through the cards or tracking your knowledge through the card tester feature. When you shuffle through the cards then you just click through the cards randomly and indefinitely. If you go through the tester option you must select the side to be questioned on, the side to be answering with and the type of answers to give (whether know/don't know or multiple choice). All testing is on the honor system as this is a tool one should use to teach themselves.</p>
+
+    <h1>Flashcubes</h1>
+    <p>Flashcubes are the name for the cards that go in flashdecks. They can have up to 4 sides. </p>
+    <h5 id="flashcube_capabilities">Flashcube Capabilities</h5>
+    <p>A flashcard is quite useful because it has 4 sides so you can store more than just two pieces of information about a fact. Also the sides of flashcubes are quite versatile because they can contain most language writing systems, images, and audio file formats.</p>
+    <h5 id="making_a_flashcube">Making A Flashcube</h5>
+    <p>A flashcube is made by clicking the "Add A New Card" button on a flashdeck profile page. Then enter the data on the form that pops up.</p>
+    <h1>Forums</h1>
+    <p>We believe at this site that learning can be a very personal experience but we also believe that we all benefit from discussing thoughts and interacting with others. We aim to add a friends feature and messenger app in the future. But until then we have made a forumn where ideas can be discussed.</p>
+    <h5 id="creating_a_forum">Creating A Forum</h5>
+    <p>Creating a forum is something that anyone can do. Simply go to the Forums page and then click the  "Create Forum" button. Then enter the forum title and description and press submit.
+    <h5 id="posting_on_a_forum">Posting On A Forum</h5>
+    <p>To post on a forum, go to the last page of the forum and click the button "Create Post" to create a post.
+
+    <h1>Search</h1>
+    <p>Search is a way for people to find other users as well as decks that contain certain topics and titles.</p>
+    <h5 id="search_options">Search Options</h5>
+    <p>Searches can be filtered by Users as well as Decks. In the future we plan to add forum posts.</p>
+    <h1>Other</h1>
+    <p>This section covers topics that dont have a larger section of their own yet. </p>
+    <h5 id="post_custom_questions">Post Custom Questions</h5>
+    <p>We are planning to add a place to submit requests here</p>
+
+  </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - {{user.username}}{% endblock %} 
+
+{% block head %}
+{{ super() }}
+    <style type="text/css">
+        
+    
+        .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+        }
+        .avatar-row{
+            height: 10px;
+
+        }
+
+
+        .bottom-align {
+            position: absolute;
+            bottom: 0;
+
+            left: 0;
+        }
+         // in case your dealing with a block element apply this to the element itself 
+        .center-block {
+           margin-left:auto;
+           margin-right:auto;
+           display:block;
+        }
+        // in case your dealing with a inline element apply this to the parent 
+        .text-center {
+           text-align:center
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+
+<ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+      <li class="breadcrumb-item"><a href="/forums"> Forums </a></li>
+
+      <li class="breadcrumb-item active">{{forum.title}}</li>
+     
+    </ol>
+
+<nav aria-label="Page navigation example">
+<ul class="pagination">
+{% if end_page > 1 %}
+
+    {% if page == 1 %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Previous</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="{{pagination_url_dict[0]}}">Previous</a></li>
+    <li class="page-item "><a class="page-link" href="{{pagination_url_dict[0]}}">{{page-1}}</a></li>
+    {% endif %}
+
+    <li class="page-item active"><a class="page-link" href="#">{{page}}</a></li>
+    {% if page == end_page %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Next</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="{{pagination_url_dict[2]}}">{{page+1}}</a></li>
+    <li class="page-item "><a class="page-link" href="{{pagination_url_dict[2]}}">Next</a></li>
+    {% endif %}
+{% endif %}
+</ul>
+</nav> 
+
+
+<div class="list-group">
+  {% for post in forum.posts[(page-1)*results_per_page:(page)*results_per_page] %}
+  
+<div class="row list-group-item  d-inline-flex flex-row  align-items-stretch flex-nowrap p-0">
+    <a class="btn btn-secondary m-0" href="/profile/{{post.poster.username}}" class="">
+      <div class='p-2'>
+      
+        <div class="avatar-profile" align="left">
+          <div class="circle-avatar" style="background-image: url('{{post.poster.profile}}')"></div>
+        </div>
+        <h5>{{post.poster.username}}</h5>
+      
+      </div>
+    </a>
+
+      <div class="flex-column p-3">
+        <div class="d-flex align-items-start">
+          <p class="" >{{post.post}}</p>
+        </div>
+        <div class="d-flex align-items-end">
+          <small class="text-muted ">Post Date: {{post.creation_time}}</small>
+        </div>
+      </div>
+    </div>
+    
+
+
+  {% endfor %}
+</div>    
+
+{% if page == end_page %}
+ <div class="row m-3 ">
+  <div class="col-xs-12 col-sm-6 col-md-4"></div>
+  <div class="col-xs-12 col-sm-6 col-md-4">
+    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#createPostFormModal">
+      Create Post    
+    </button>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-md-4"></div>
+</div>
+{% endif %}
+
+<!-- Modal -->
+        <div class="modal fade" id="createPostFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Create A New Forum</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                    <form id="createForumForm" method="POST" action='{{pagination_url_dict[1]}}' enctype="multipart/form-data">
+                        {{post_form}}
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+{% endblock %}
+

@@ -38,7 +38,11 @@
     </style>
 {% endblock %}
 {% block content %}
-
+{% for message in get_flashed_messages() %}
+<div class="alert alert-info" role="alert">
+  <strong>Heads up!</strong> {{ message }}
+</div>
+{% endfor %}
 <div class="card card-inverse" style="background-color: #333; border-color: #333;">
   
   <div class="card-block">
@@ -96,10 +100,33 @@
 
 
 
-    {% for message in get_flashed_messages() %}
-        <div class=flash>{{ message }}</div> 
-    {% endfor %}
 
+
+<!-- Modal -->
+        <div class="modal fade" id="updateProfileFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Update Profile Information</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                    <form id="updateProfileForm" method="POST" action='/user_update/{{current_user.id}}' enctype="multipart/form-data">
+                        {{profile_update_form}}
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
 
 {% endblock %}
 

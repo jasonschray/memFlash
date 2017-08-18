@@ -8,6 +8,13 @@
         width:100%;
         height: auto;
     }
+    .dropdown-menu {
+      width: 100%; 
+    }
+
+    .btn{
+     width: 100%;
+    }
 
 </style>
 {% endblock %}
@@ -27,6 +34,11 @@
 
 
   <div class="card m-3" >
+    <div class="card-block loat-left modal-body-0">
+        <div class="avatar-profile float-left p-0 m-0 img-thumbnail" >
+          <div class="square-avatar" style="background-image: url('{{flashdeck.profile}}')"></div>
+        </div>
+      </div>
       <div class="card-block ">
                   <h4 class="card-title">{{flashdeck.name}}</h4>
                   <p class="card-text">{{flashdeck.self_description}}</p>
@@ -37,13 +49,24 @@
   <div class="card-block ">
     <div class="row">
 
-    {% if flashcube_count > 0 %}
-        <div class="class=col-xs-12 col-sm-12 col-md-12  col-lg-3">
-            <a class="btn btn-primary btn-lg btn-block" href="{{random_test_url}}">Random Card Test</a> 
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="dropdown">
+        <button class="btn btn-primary btn-lg btn-block dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Learn The Deck
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+           <a class="dropdown-item" href="{{random_test_url}}"
+          {% if flashcube_count > 0 %}disabled{% endif %}>Random Shuffle</a> 
+          <button type="button" class="dropdown-item" data-toggle="modal" data-target="#smartTesterFormModal"
+          {%if flashcube_count <5%}disabled{% endif %}>Card Tester</button> 
+          
         </div>
-    {% endif %}
+      </div>
+    </div>
+
+     
     {% if current_user.username == user.username %}
-        <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-3">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
             <button type="button" class="btn btn-primary btn-lg btn-block " data-toggle="modal" data-target="#updateFormModal">
               Update Deck Info
             </button>
@@ -69,6 +92,14 @@
     {% endif %}
     
     </div>
+<!--     <div class="row">
+
+        <div class="class=col-xs-12 col-sm-12 col-md-12  col-lg-3"> -->
+            <!-- <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#smartTesterFormModal">
+              Smart Card Tester
+            </button>  -->
+       <!--  </div>
+    </div> -->
     <hr class="between"/>
   </div>
 
@@ -78,6 +109,26 @@
       {% for card in flashdeck.flashcubes %}
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
             <a href="/flashcube_profile/{{card.id}}" style='text-decoration:none'>
+            <!-- {% if knowledge_dict[card.id|string]['INDEX'] < 0.15 %}
+                <div class="card btn-secondary m-3" style='background-color:lightgreen' type="button">
+
+            {% elif knowledge_dict[card.id|string]['INDEX'] < 0.3 %}
+                <div class="card btn-secondary m-3" style='background-color:gold' type="button">
+
+
+            {% elif knowledge_dict[card.id|string]['INDEX'] < 0.3 %}
+                <div class="card btn-secondary m-3" style='background-color:orange' type="button">
+
+
+            {% elif knowledge_dict[card.id|string]['INDEX'] < 0.3 %}
+                <div class="card btn-secondary m-3" style='background-color:lightpink' type="button">
+
+
+            {% else %}
+                <div class="card btn-secondary m-3" style='background-color:lightcoral' type="button">
+
+
+            {% endif %} -->
             <div class="card btn-secondary m-3" type="button">
             <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
             {% for side in card.sides %}
@@ -92,13 +143,20 @@
                     'Your browser does not support the audio tag.'
                     </audio>
                   {% elif card.sides[side]['side_type'] =='IMAGE'%}   
-                    <img src="{{card.sides[side]['side_value']}}" class="img-responsive rounded mx-auto d-block" alt="Responsive image">
+                    <img src="{{card.sides[side]['side_value']}}" class="img-responsive img-fluid rounded mx-auto d-block" alt="Responsive image">
                   {% endif %}
                 </div>
-                {% if loop.index !=  card.sides.__len__() %}
                 <hr class="between"/>
-                {% endif %}
             {% endfor %}
+          
+            
+                  <div class="card-block ">
+
+                  <h4 class="card-title">Memorization Status</h4>
+                  
+                  <p class="card-text">{{knowledge_dict[card.id|string]['STATUS']}}</p>
+
+                </div>
           </div>
           </a>
         </div>
@@ -106,7 +164,35 @@
     </div> 
   </div>
   </div>
+  <div class="class=col-xs-12 col-sm-12 col-md-12 col-lg-4">
+    <a class="btn btn-primary btn-lg btn-block" href="/reset_memory/{{flashdeck.id}}">Reset Deck Memorization Status</a> 
+</div>
 
+ <!-- Modal -->
+        <div class="modal fade" id="smartTesterFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Define Smart Test</h4>
+
+              </div>
+              <div class="modal-body">
+                
+                {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div> 
+                {% endfor %}
+                    <form id="smartTesterForm" method="POST" action='/smart_card_tester/{{flashdeck.id}}' enctype="multipart/form-data">
+                        {{smartTesterForm}}
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
     
  {% if current_user.username == user.username %}
     <!-- Modal -->
@@ -162,6 +248,7 @@
         </div>
     {% endif %}
 
+<script src="{{url_for('static', filename='smart_card_tester_form.js')}}"></script>
 
     
 {% endblock %}

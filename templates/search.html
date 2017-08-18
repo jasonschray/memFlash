@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Mem Flash - {% endblock %} 
+
+{% block head %}
+{{ super() }}
+
+<style type="text/css">
+/*    .show-sides {
+      display: none;
+    }
+    .test-cards {
+      display: none;
+    }*/
+
+    .de-activate {
+      display: none;
+    }
+    .between {
+    /*  border: 1px solid rgba(0,0,0,.125);*/
+    margin-left:0px;
+    margin-right:0px;
+    }
+    .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+    }
+
+    .search-circle-avatar{
+    /* make it responsive */
+      
+      height: 100%;
+      width: 100%;
+
+
+    
+    
+    display:block;
+ 
+    /* div height to be the same as width*/
+    
+
+    /* make it a circle */
+    border-radius:50%;
+
+    /* Centering on image`s center*/
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+
+    /* it makes the clue thing, takes smaller dimension to fill div */
+    background-size: cover;
+
+    border: 5px solid #cfd8dc;
+    }
+
+    
+    
+    
+    </style>
+    
+{% endblock %}
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile/{{user.username}}"> {{user.username}} </a></li>
+
+      <li class="breadcrumb-item active">Search</li>
+     
+    </ol>
+
+
+
+
+  <form class="form-inline col-xs-12 " id="searchForm" method="POST" action='/search' enctype="multipart/form-data">
+      <div class="col-xs-12 col-sm-4 col-md-1">
+        <select class="custom-select" name='search_type' form='searchForm'>
+          <option value="all" {%if search_type == 'all'%}selected{% endif %}>All</option>
+          <option value="users"{%if search_type == 'users'%}selected{% endif %}>Users</option>
+          <option value="decks"{%if search_type == 'decks'%}selected{% endif %}>Decks</option>
+        </select>
+      </div>
+      <div class='col-xs-12 col-sm-4 col-md-8'>
+        <input class="form-control mr-sm-2" type="text" name='search_query' placeholder="Search" {% if search_query is defined and search_query %} value="{{search_query}}" {% endif %}>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-3 ">
+        <nav aria-label="Page navigation example">
+  <ul class="pagination">
+{% if end_page > 1 %}
+
+    {% if page == 1 %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Previous</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="/search/{{page-1}}{{search_url}}">Previous</a></li>
+    <li class="page-item "><a class="page-link" href="/search/{{page-1}}{{search_url}}">{{page-1}}</a></li>
+    {% endif %}
+
+    <li class="page-item active"><a class="page-link" href="#">{{page}}</a></li>
+    {% if page == end_page %}
+    <li class="page-item disabled"><a class="page-link" tabindex="-1" href="#">Next</a></li>
+    {% else %}
+    <li class="page-item "><a class="page-link" href="/search/{{page+1}}{{search_url}}">{{page+1}}</a></li>
+    <li class="page-item "><a class="page-link" href="/search/{{page+1}}{{search_url}}">Next</a></li>
+    {% endif %}
+{% endif %}
+  </ul>
+</nav>
+      </div>
+  </form>
+
+<div class="list-group">
+  {% for result in search_results %}
+  <a href="{{result.link}}" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="row">
+      <h4 class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{{result.title}}</h5>
+    </div>
+    <div class='row d-inline-flex align-items-end'>
+      {% if result.image and not result.owner %}
+        <div class="avatar-profile" align="left">
+          <div class="search-circle-avatar" style="background-image: url('{{result.image}}')"></div>
+        </div>
+      {% elif result.image and result.owner %}
+      <div class="avatar-profile " align="left">
+          <div class="square-avatar img-thumbnail" style="background-image: url('{{result.image}}')"></div>
+        </div>
+      {% endif %}
+        <div class="ml-2 mb-1 ">
+          <p  >{{result.description}}</p>
+      </div>
+    </div>
+    {% if result.owner %}
+    <div class="row">
+      <small class="text-muted">Deck By {{result.owner}}</small>
+    </div>
+    {% endif %}
+  </a>
+  {% endfor %}
+</div>
+
+<script src="{{url_for('static', filename='search.js')}}"></script>
+
+{% endblock %}

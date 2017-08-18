@@ -11,14 +11,20 @@ class abstractField( object ):
     file_object = None
     htmlClass = None
     form=None
+    html_id = None
+    minlength = None
 
-    def __init__(self, name = None, request = None, value = None, htmlClass = None, form=None):
+    def __init__(self, name = None, request = None, value = None, htmlClass = None, form=None, html_id=None, minlength = None):
         if name is not None:
             self.name = name
         if value is not None:
             self.value = value
         if htmlClass is not None:
             self.htmlClass = htmlClass
+        if html_id is not None:
+            self.html_id = html_id
+        if minlength is not None:
+            self.minlength = minlength
 
     
     def get_html(self):
@@ -28,6 +34,8 @@ class abstractField( object ):
                 + ('' if not self.value else ' value="'+self.value+'"')
                 + ('' if not self.htmlClass else ' class="'+self.htmlClass+'"')
                 + ('' if not self.form else ' form="'+self.form+'"')
+                + ('' if not self.html_id else ' id="'+self.html_id+'"')
+                + ('' if not self.minlength else ' minlength="'+self.minlength+'"')
                 + '>')
 
     @abstractmethod
@@ -88,6 +96,7 @@ class submitField ( abstractField ):
     field_type = "Submit"
     value= "Submit"
     name = "Submit"
+    htmlClass = "btn btn-lg btn-primary btn-block"
 
     def validate(self):
         return True
@@ -96,6 +105,9 @@ class passwordField ( abstractField ):
     name = 'password'
     field_type = 'Password'
     autocomplete = 'off'
+    minlength = '6'
+
+    
 
     def validate(self):
         return True
@@ -105,6 +117,9 @@ class passwordField ( abstractField ):
                 + ('' if not self.field_type else ' type="'+self.field_type+'"')
                 + ('' if not self.name else ' name="'+self.name+'"')
                 + ('' if not self.autocomplete else ' autocomplete="'+self.autocomplete+'"')
+                + ('' if not self.htmlClass else ' class="'+self.htmlClass+'"')
+                + ('' if not self.html_id else ' id="'+self.html_id+'"')
+                + ('' if not self.minlength else ' minlength="'+self.minlength+'"')
                 + '>')
 
 class verifiedPasswordField ( abstractField ):
@@ -172,7 +187,6 @@ class selectField ( abstractField ):
 
 
     def get_html(self):
-        print(self.value)
         html = ('<select'
                 +('' if not self.name else ' name="'+self.name+'"')
                 +('' if not self.value else ' value="'+self.value+'"')
@@ -224,8 +238,16 @@ class audioField ( uploadField ):
     name = "audio"
     accept = 'audio/*'
     support_key = 'AUDIO'
+   
+
+class hiddenField ( abstractField ):
+    field_type ="hidden"
+
+    def validate(self):
+        return True
 
     
+
 class abstractForm( object ):
 
 
@@ -274,10 +296,31 @@ class abstractForm( object ):
         return result
 
 class loginForm ( abstractForm ):
-    fields = [{'Name':'Username','Field':textField(name = 'username')},
-              {'Name':'Password','Field':passwordField()},
+    fields = [{'Name':'Username','Field':textField(name = 'username', htmlClass="form-control")},
+              {'Name':'Password','Field':passwordField(htmlClass = "form-control")},
               {'Name': None,'Field':submitField()}]
 
+    def get_html(self):
+        html = ''
+        for field_dict in self.fields:
+            html += ('<div>' 
+                     + ('' if not field_dict['Name'] else (field_dict['Name']+': '))
+                     + field_dict['Field'].get_html()
+                     + '</div> <br>\n' )
+        return html
+
+class recover_password_Form ( abstractForm ):
+    fields = [{'Name':'Email','Field':emailField(htmlClass="form-control")},
+              {'Name': None,'Field':submitField()}]
+
+    def get_html(self):
+        html = ''
+        for field_dict in self.fields:
+            html += ('<div>' 
+                     + ('' if not field_dict['Name'] else (field_dict['Name']+': '))
+                     + field_dict['Field'].get_html()
+                     + '</div> <br>\n' )
+        return html    
 
 supported_sides = {textField.support_key: textField,
                    imageField.support_key: imageField,
@@ -354,10 +397,9 @@ class cubeBuildForm ( abstractForm ):
 
 
 
-class signupForm ( abstractForm ):
-    fields = [{'Name':'Username','Field':textField(name = 'username')},
-              {'Name':'Email','Field':emailField()},
-              {'Name':'Password','Field':verifiedPasswordField()},
+class updatePasswordForm ( abstractForm ):
+    fields = [{'Name':'Password','Field':passwordField(htmlClass="form-control")},
+              {'Name':'Repeat Password','Field':passwordField(htmlClass="form-control")},
               {'Name': None,'Field':submitField()}]
 
     def __init__(self,request=None):
@@ -367,6 +409,43 @@ class signupForm ( abstractForm ):
             for i in range(0,len(self.fields)):
                 field_dict = self.fields[i]
                 field_dict['Field'].update_value(request=request)
+
+    def validate(self):
+        if not self.is_post:
+            return False
+        else:
+            for field_dict in self.fields:
+                if not field_dict['Field'].validate():
+                    return False
+        if self.fields[0]['Field'].value != self.fields[1]['Field'].value:
+            return False
+        return True
+
+class signupForm ( abstractForm ):
+    fields = [{'Name':'Username','Field':textField(name = 'username',htmlClass="form-control", minlength='6')},
+              {'Name':'Email','Field':emailField(htmlClass="form-control")},
+              {'Name':'Password','Field':passwordField(htmlClass="form-control", minlength='6')},
+              {'Name':'Repeat Password','Field':passwordField(htmlClass="form-control", minlength='6')},
+              {'Name': None,'Field':submitField()}]
+
+    def __init__(self,request=None):
+        if request.method == 'POST':
+            self.is_post = True
+        if request is not None and self.is_post:
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                field_dict['Field'].update_value(request=request)
+
+    def validate(self):
+        if not self.is_post:
+            return False
+        else:
+            for field_dict in self.fields:
+                if not field_dict['Field'].validate():
+                    return False
+        if self.fields[2]['Field'].value != self.fields[3]['Field'].value:
+            return False
+        return True
 
 
 class emailVerificationForm ( abstractForm ):
@@ -385,22 +464,23 @@ class emailVerificationForm ( abstractForm ):
 
 
 class deckUpdateForm ( abstractForm ):
-    fields = [{'Name': 'Deck Name','Field':textField(name = 'deck_name', value=None)},
+    fields = [{'Name':'Profile Photo','Field':imageField(name = 'profile_photo')},
+              {'Name': 'Deck Name','Field':textField(name = 'deck_name', value=None)},
               {'Name':'Description','Field':textArea(name = 'self_description', htmlClass = 'description_box', form='updateDeckForm', value=None)},
-              {'Name': None,'Field':submitField()}]
+              {'Name': None,'Field':submitField(value='Update')}]
 
     def __init__(self,request=None, deck = None):
         if deck is not None:
-            self.fields[0]['Field'].value = deck.name
-            self.fields[1]['Field'].value = deck.self_description
+            self.fields[1]['Field'].value = deck.name
+            self.fields[2]['Field'].value = deck.self_description
 
-        if request is not None:
-            if request.method == 'POST':
-                self.is_post = True
-        if self.is_post:
-            for field_dict in self.fields:
-                if field_dict['Field'].name in request.form:
-                    field_dict['Field'].value = request.form[field_dict['Field'].name]
+        if request is not None and request.method == 'POST':
+            self.is_post = True
+        if self.is_post :
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                if field_dict['Field'].name in request.form or field_dict['Field'].name in request.files:
+                    field_dict['Field'].update_value(request=request)
 
 class profileUpdateForm ( abstractForm ):
 
@@ -422,7 +502,67 @@ class profileUpdateForm ( abstractForm ):
                 if field_dict['Field'].name in request.form or field_dict['Field'].name in request.files:
                     field_dict['Field'].update_value(request=request)
 
+class forumForm ( abstractForm ):
+    fields = [{'Name':'Forum Title','Field':textField(name = 'title')},
+              {'Name':'Description of Forum','Field':textArea(name = 'description')},
+              {'Name': None,'Field':submitField()}]
 
+    def __init__(self,request=None):
+        if request.method == 'POST':
+            self.is_post = True
+        if request is not None and self.is_post:
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                field_dict['Field'].update_value(request=request)
+
+class postForm ( abstractForm ):
+    fields = [{'Name':'Forum Post Text','Field':textArea(name = 'post')},
+              {'Name': None,'Field':submitField()}]
+
+    def __init__(self,request=None):
+        if request.method == 'POST':
+            self.is_post = True
+        if request is not None and self.is_post:
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                field_dict['Field'].update_value(request=request)
+
+
+
+
+class smartTesterForm ( abstractForm ):
+
+    fields = []
+    is_post = False
+    is_populated = False
+    test_input_options = [{'Key': 'Multiple Choice', 'Value': 'multiple_choice'},
+                          {'Key': 'True False', 'Value': 'true_false'}]
+    
+    def __init__(self,request=None, flashdeck = None):
+        if flashdeck is not None:
+            deck_info = flashdeck.getSideInfo()
+            self.fields = []
+            options = []
+            self.fields.append({'Name': None, 'Field':hiddenField(name='flashdeck_id',value=str(flashdeck.id))})
+
+            for i in range(0,len(deck_info)):
+                side_dict = deck_info[i]
+                name = side_dict['side_name']
+                options.append({'Key': name, 'Value': str(i)})
+
+            self.fields.append({'Name': 'Question Side', 'Field':selectField(name='question_side',options=options)})
+            self.fields.append({'Name': 'Answer Side', 'Field':selectField(name='answer_side',options=options)})
+            self.fields.append({'Name': 'Answer Type', 'Field':selectField(name='answer_type',options=self.test_input_options)})
+
+            self.fields.append({'Name': None,'Field':submitField(value='Start Smart Test')})
+            self.is_populated = True
+        if request is not None and request.method == 'POST':
+            self.is_post = True
+        if self.is_post and self.is_populated:
+            for i in range(0,len(self.fields)):
+                field_dict = self.fields[i]
+                if field_dict['Field'].name in request.form or field_dict['Field'].name in request.files:
+                    field_dict['Field'].update_value(request=request)
 
 if __name__== '__main__':
     print('testing')

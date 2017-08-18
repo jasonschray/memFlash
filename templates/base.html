@@ -93,6 +93,41 @@
     margin-left:0px;
     margin-right:0px;
     }
+
+    .square-avatar{
+    /* make it responsive */
+      
+      height: 100%;
+      width: 100%;
+
+
+    
+    
+    display:block;
+ 
+    /* div height to be the same as width*/
+    
+
+    /* make it a circle */
+    /*border-radius:50%;*/
+
+    /* Centering on image`s center*/
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+
+    /* it makes the clue thing, takes smaller dimension to fill div */
+    background-size: cover;
+
+    border: 5px solid #cfd8dc;
+    }
+
+    .avatar-profile{
+            height: 100px;
+            width: 100px;
+            margin:auto;
+            padding: 5px 5px;
+    }
     </style>
 
     {% endblock %}
@@ -110,8 +145,11 @@
               </a>
         <div id="navbarNavDropdown" class="navbar-collapse collapse">
             <ul class="navbar-nav mr-auto">
-               <li> <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+               <li> <form class="form-inline" id="navSearchForm" method="POST" action='/search' enctype="multipart/form-data">
+                    <input class="form-control mr-sm-2" type="text" name='search_query' placeholder="Search" 
+                    {% if search_query is defined and search_query %}
+                    value="{{search_query}}"
+                    {% endif %}>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                   </form>
                 </li>
@@ -119,16 +157,17 @@
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle circle-avatar my-avatar" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                    <a class="nav-link dropdown-toggle circle-avatar my-avatar" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                       
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 
                         <a class="dropdown-item" href="/profile/{{current_user.username}}">My Profile</a>
                         <a class="dropdown-item" href="/profile/{{current_user.username}}/favorite_decks">Favorited Decks</a>
-                        <a class="dropdown-item" href="/#" data-toggle="modal" data-target="#updateProfileFormModal">Edit Profile</a>
                         <a class="dropdown-item" href="/profile/{{current_user.username}}/activity_log">Activity</a>
                         <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/faq">FAQ</a>
+                        <a class="dropdown-item" href='{{current_user.reset_link}}'>Reset Password</a>
                         <a class="dropdown-item" href="/logout">Log Out</a>
 
                     </div>
@@ -139,8 +178,9 @@
                 </li>
                 
                  <li class="nav-item">
-                    <a class="nav-link" href="#">Forums</a>
+                    <a class="nav-link" href="/forums">Forums</a>
                  </li>
+
             </ul>
         </div>
         </nav>
@@ -156,31 +196,7 @@
         {% endblock %}
       </div>
 
-    <!-- Modal -->
-        <div class="modal fade" id="updateProfileFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Update Profile Information</h4>
-
-              </div>
-              <div class="modal-body">
-                
-                {% for message in get_flashed_messages() %}
-                <div class=flash>{{ message }}</div> 
-                {% endfor %}
-                    <form id="updateProfileForm" method="POST" action='/user_update/{{current_user.id}}' enctype="multipart/form-data">
-                        {{profile_update_form}}
-                    </form>
-              </div>
-              <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button> -->
-              </div>
-            </div>
-          </div>
-        </div>
+    
 
    
     </footer>
