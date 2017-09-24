@@ -82,7 +82,7 @@ class textArea ( abstractField ):
                 + ('' if not self.name else ' name="'+self.name+'"')
                 + ('' if not self.htmlClass else ' class="'+self.htmlClass+'"')
                 + ('' if not self.form else ' form="'+self.form+'"')
-                + ('' if not self.rows else ' rows="'+self.rows+'"')
+                # + ('' if not self.rows else ' rows="'+self.rows+'"')
                 + ('' if not self.cols else ' cols="'+self.cols+'"')
                 + '>'
                 + ('' if not self.value else self.value)
@@ -302,6 +302,7 @@ class loginForm ( abstractForm ):
 
     def get_html(self):
         html = ''
+        self.fields[0]['Field'].value = None
         for field_dict in self.fields:
             html += ('<div>' 
                      + ('' if not field_dict['Name'] else (field_dict['Name']+': '))
@@ -446,6 +447,17 @@ class signupForm ( abstractForm ):
         if self.fields[2]['Field'].value != self.fields[3]['Field'].value:
             return False
         return True
+
+    def get_html(self):
+        html = ''
+        for field_dict in self.fields:
+            self.fields[0]['Field'].value = None
+            self.fields[1]['Field'].value = None
+            html += ('<div>' 
+                     + ('' if not field_dict['Name'] else (field_dict['Name']+': '))
+                     + field_dict['Field'].get_html()
+                     + '</div> <br>\n' )
+        return html
 
 
 class emailVerificationForm ( abstractForm ):

@@ -3,11 +3,26 @@
 
 {% block head %}
 {{ super() }}
-<!--    <style type="text/css">
-    .card{
-        min-width: 200px;
+    <style type="text/css">
+    
+    .card-columns {
+      @include media-breakpoint-only(lg) {
+        column-count: 4;
+      }
+      @include media-breakpoint-only(xl) {
+        column-count: 5;
+      }
+      @include media-breakpoint-only(md) {
+        column-count: 3;
+      }
+      @include media-breakpoint-only(sm) {
+        column-count: 2;
+      }
+      @include media-breakpoint-only(xs) {
+        column-count: 1;
+      }
     }
-    </style>-->
+    </style>
 {% endblock %}
 {% block content %}
 
@@ -41,36 +56,38 @@
 </div>
       </div>
 
-<hr class="between"/>
-  <div class="card-block ">
-<div class="card-deck">
-  {% for deck in decks %}
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
-        <a href="/flashdeck_profile/{{deck.id}}" style='text-decoration:none'>
-        <div class="card btn-secondary m-3" type="button">
-        <div class="card-block">
-          <div class="avatar-profile p-0 m-0 img-thumbnail img-responsive rounded mx-auto d-block" >
-          <div class="square-avatar" style="background-image: url('{{deck.profile}}')"></div>
-        </div>
-        </div>
-        <div class="card-block mb-0 pb-0">
-          <h4 class="card-title">{{deck.name}}</h4>
-        </div>
+<div class="between"></div>
+ 
+<div class="card-block ">
+  <div class="card-deck">
+    {% for deck in decks %}
+    <!-- <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 "> -->
+    <div class="card-columns">
+          <a href="/flashdeck_profile/{{deck.id}}" style='text-decoration:none'>
+          <div class="card btn-secondary m-3" type="button">
+          <div class="card-block">
+            <div class="avatar-profile p-0 m-0 img-thumbnail img-responsive rounded mx-auto d-block" >
+            <div class="square-avatar" style="background-image: url('{{deck.profile}}')"></div>
+          </div>
+          </div>
+          <div class="card-block mb-0 pb-0">
+            <h4 class="card-title">{{deck.name}}</h4>
+          </div>
 
-        <div class="card-block">
-          <p class="card-text">{{deck.self_description}}</p>
-<!--           <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
- -->          
-        </div>
+          <div class="card-block">
+            <p class="card-text">{{deck.self_description}}</p>
+  <!--           <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+   -->          
+          </div>
 
-      </div>
-      </a>
-  </div>
-    {% endfor %}
-  
-</div>    
-</div>
-</div>
+        </div>
+        </a>
+    </div>
+      {% endfor %}
+    
+  </div>  
+</div>  
+
         
     
     {% if current_user.username == user.username %}

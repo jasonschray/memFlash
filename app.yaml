@@ -2,9 +2,20 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+
+env_variables:
+    # Replace user, password, database, and instance connection name with the values obtained
+    # when configuring your Cloud SQL instance.
+    SQLALCHEMY_DATABASE_URI: >-
+      mysql://root:dwwFFi5nnmttG5n5@/test?unix_socket=/cloudsql/memflash-167204:us-central1:memflash
+
+beta_settings:
+    cloud_sql_instances: memflash-167204:us-central1:memflash
+
 handlers:
 - url: .*
   script: main.app
+  secure: always
 
 libraries:
 - name: pycrypto
@@ -13,13 +24,7 @@ libraries:
   version: latest
 - name: MySQLdb
   version: "latest"
+- name: PIL
+  version: "latest"
 
 
-# Link to mysqldb info for gcloud
-#https://cloud.google.com/appengine/docs/standard/python/cloud-sql/  
-
-#mysql temp password and stuff
-#2017-04-05T02:58:18.535120Z 1 [Note] A temporary password is generated for root@localhost: w00Ricoyny;g
-
-#root@localhost: w00Ricoyny;g
-#If you lose this password, please consult the section How to Reset the Root Password in the MySQL reference manual.
